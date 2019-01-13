@@ -1,0 +1,52 @@
+.mygreen{
+    background: #42b983 !important;
+}
+
+button:focus{
+    outline: none !important;
+}
+
+
+.algalfluel{
+    background: #42ad67;
+}
+
+.bluehorizon{
+    color: #CC6500;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+.yel{
+    background: #FFCC66;
+}
+
+.sticker{
+    background: #669ACC;
+    max-width: 200px;
+}
+
+.sticker_text{
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.date{
+    font-size: 14px;
+}
+
+.edit-icon{
+    width: 13px;
+    height: 13px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 4px;
+    right: 6px;
+}
+
+.info-icon{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 2px;
+    right: 29px;
+}

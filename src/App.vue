@@ -1,10 +1,28 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+      <b-navbar toggleable="sm" variant="dark" type="dark" fixed="top">
+          <div class="container">
+              <b-navbar-brand href="#">Task Tracker</b-navbar-brand>
+              <b-navbar-toggle class="border-0" target="nav_collapse"></b-navbar-toggle>
+
+              <b-collapse is-nav id="nav_collapse">
+                  <!-- Right aligned nav items -->
+
+                  <b-navbar-nav class="mr-auto">
+                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/">Авторизация</router-link>
+                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/task">Задачи</router-link>
+                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/">Выйти</router-link>
+                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/signup">Регистрация</router-link>
+                  </b-navbar-nav>
+
+              </b-collapse>
+          </div>
+
+      </b-navbar>
+      <br>
+      <div class="mt-5">
+          <router-view/>
+      </div>
   </div>
 </template>
 
@@ -13,7 +31,6 @@
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 #nav {
@@ -25,7 +42,7 @@
   color: #2c3e50;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+a.router-link-exact-active {
+  color: #42b983 !important;
 }
 </style>
