@@ -1,21 +1,40 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from './store'
 
 Vue.use(Router)
+
+const ifNotAuthenticated = (to, from, next) => {
+  if (!store.getters.isAuthenticated) {
+    next('/')
+    return
+  }
+  next('/task')
+}
+
+const ifAuthenticated = (to, from, next) => {
+  // localStorage.removeItem('user-token')
+  if (store.getters.isAuthenticated) {
+    next()
+    return
+  }
+  next('/')
+}
 
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/auth',
       name: 'auth',
       component: () => import('./views/Auth.vue')
     },
     {
-      path: '/task',
+      path: '/',
       name: 'task',
-      component: () => import('./views/Task.vue')
+      component: () => import('./views/Task.vue'),
+      beforeEnter: ifAuthenticated
     },
     {
       path: '/task/add',

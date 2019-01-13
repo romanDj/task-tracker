@@ -9,6 +9,9 @@
                       type="text"
                       placeholder="Введите логин">
         </b-form-input>
+        <template v-if="errors.login">
+          <p class="text-danger mt-2" v-for="item in errors.login">{{item}}</p>
+        </template>
       </b-form-group>
 
       <b-form-group id="exampleInputGroup2"
@@ -19,6 +22,10 @@
                       type="password"
                       placeholder="Введите пароль">
         </b-form-input>
+        <template v-if="errors.password">
+          <p class="text-danger mt-2" v-for="item in errors.password">{{item}}</p>
+        </template>
+
       </b-form-group>
 
       <b-button class="mb-3 mygreen" @click.prevent="loginBtn" variant="success">Авторизация</b-button>
@@ -42,6 +49,11 @@ export default {
       password: ''
     }
   },
+  computed: {
+    errors: function () {
+      return this.$store.getters.errors
+    }
+  },
   components: {
 
   },
@@ -50,11 +62,10 @@ export default {
       const login = this.login
       const password = this.password
       this.$store.dispatch('AUTH_REQUEST', { login, password }).then((response) => {
-        console.log(this.$store.getters.response)
-        // this.$router.push('/')
+        if (response) {
+          this.$router.push({ name: 'task' })
+        }
       })
-
-      // console.log(this.$store.getters.response)
     }
   }
 
@@ -64,4 +75,5 @@ export default {
   #login-form{
     width: 500px;
   }
+
 </style>

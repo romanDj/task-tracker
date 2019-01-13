@@ -2,38 +2,26 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
+const domain = 'http://middleapi'
 
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('user-token') || '',
-    status: '',
-    hasLoadedOnce: false,
-    responseServer: ''
+    errorsAuth: []
   },
   getters: {
     isAuthenticated: state => !!state.token,
-    authStatus: state => state.status,
-    response: state => state.responseServer
+    errors: state => state.errorsAuth
   },
   mutations: {
-    AUTH_REQUEST: (state) => {
-      state.status = 'loading'
-    },
     AUTH_SUCCESS: (state, resp) => {
-      state.status = 'success'
-      state.token = resp.token
-      state.hasLoadedOnce = true
-    },
-    AUTH_ERROR: (state) => {
-      state.status = 'error'
-      state.hasLoadedOnce = true
+      state.token = resp
     },
     AUTH_LOGOUT: (state) => {
       state.token = ''
     },
-    SET_response: (state, resp) => {
-      state.responseServer = resp
-      // console.log(resp)
+    AUTH_RESPONSE: (state, resp) => {
+      state.errorsAuth = resp
     }
   },
   actions: {
@@ -42,17 +30,34 @@ export default new Vuex.Store({
         let data = new FormData()
         data.append('login', user.login)
         data.append('password', user.password)
-
-        fetch('http://middleapi/api/auth', {
+        let statusQuery = 0
+        fetch(domain + '/api/auth', {
           method: 'post',
           body: data
         })
-          .then((r) => r.json())
-          .then((response) => {
-            commit('SET_response', response)
-            resolve()
+          .then((r) => {
+            if (r.status == 200) {
+              statusQuery = r.status
+            } else {
+              statusQuery = r.status
+            }
+            return r.json()
           })
-          .catch((e) => {})
+          .then((response) => {
+            if (statusQuery == 200) {
+              commit('AUTH_SUCCESS', response.token)
+              localStorage.setItem('user-token', response.token)
+              resolve(true)
+            } else {
+              localStorage.removeItem('user-token')
+              commit('AUTH_RESPONSE', response.errors)
+              resolve(false)
+            }
+          })
+          .catch((err) => {
+            localStorage.removeItem('user-token')
+            reject(err)
+          })
       })
     },
     AUTH_LOGOUT: async ({ commit, dispatch }) => {

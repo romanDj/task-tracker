@@ -9,10 +9,9 @@
                   <!-- Right aligned nav items -->
 
                   <b-navbar-nav class="mr-auto">
-                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/">Авторизация</router-link>
-                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/task">Задачи</router-link>
-                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/">Выйти</router-link>
-                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/signup">Регистрация</router-link>
+                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/auth">Авторизация</router-link>
+                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/">Задачи</router-link>
+                      <a class="nav-link" href="#" @click.prevent="logout">Выйти</a>
                   </b-navbar-nav>
 
               </b-collapse>
@@ -25,6 +24,19 @@
       </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    logout () {
+      this.$store.dispatch('AUTH_LOGOUT')
+        .then(() => {
+          this.$router.push('/')
+        })
+    }
+  }
+}
+</script>
 
 <style>
 #app {
