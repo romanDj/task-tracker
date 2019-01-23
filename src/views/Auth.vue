@@ -10,7 +10,7 @@
                       placeholder="Введите логин">
         </b-form-input>
         <template v-if="errors.login">
-          <p class="text-danger mt-2" v-for="item in errors.login">{{item}}</p>
+          <p class="text-danger mt-2" v-for="(item, index) in errors.login" :key="index">{{item}}</p>
         </template>
       </b-form-group>
 
@@ -23,7 +23,7 @@
                       placeholder="Введите пароль">
         </b-form-input>
         <template v-if="errors.password">
-          <p class="text-danger mt-2" v-for="item in errors.password">{{item}}</p>
+          <p class="text-danger mt-2" v-for="(item, index) in errors.password" :key="index">{{item}}</p>
         </template>
 
       </b-form-group>

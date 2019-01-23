@@ -19,6 +19,7 @@ export default new Vuex.Store({
     },
     AUTH_LOGOUT: (state) => {
       state.token = ''
+      state.errorsAuth = []
     },
     AUTH_RESPONSE: (state, resp) => {
       state.errorsAuth = resp
@@ -36,7 +37,7 @@ export default new Vuex.Store({
           body: data
         })
           .then((r) => {
-            if (r.status == 200) {
+            if (r.status === 200) {
               statusQuery = r.status
             } else {
               statusQuery = r.status
@@ -44,7 +45,7 @@ export default new Vuex.Store({
             return r.json()
           })
           .then((response) => {
-            if (statusQuery == 200) {
+            if (statusQuery === 200) {
               commit('AUTH_SUCCESS', response.token)
               localStorage.setItem('user-token', response.token)
               resolve(true)
@@ -65,6 +66,37 @@ export default new Vuex.Store({
         commit('AUTH_LOGOUT')
         localStorage.removeItem('user-token')
         resolve()
+      })
+    },
+    SIGNUP_REQUEST: ({ commit, dispatch }, user) => {
+      return new Promise((resolve, reject) => {
+        let data = new FormData()
+        data.append('name', user.name)
+        data.append('login', user.login)
+        data.append('email', user.email)
+        data.append('password', user.password)
+        data.append('password2', user.password2)
+
+        fetch(domain + '/api/signup', {
+          method: 'post',
+          body: data
+        })
+          .then((r) => {
+            return r.json()
+          })
+          .then((response) => {
+            if (response.status === true) {
+              commit('AUTH_LOGOUT', response.token)
+              resolve(true)
+            } else {
+              commit('AUTH_RESPONSE', response.errors)
+              resolve(false)
+            }
+          })
+          .catch((err) => {
+            localStorage.removeItem('user-token')
+            reject(err)
+          })
       })
     }
   }

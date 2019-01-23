@@ -9,9 +9,14 @@
                   <!-- Right aligned nav items -->
 
                   <b-navbar-nav class="mr-auto">
-                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/auth">Авторизация</router-link>
-                      <router-link class="nav-link font-weight-normal mr-auto w-100" to="/">Задачи</router-link>
-                      <a class="nav-link" href="#" @click.prevent="logout">Выйти</a>
+                      <template v-if="!auth">
+                          <router-link class="nav-link font-weight-normal mr-auto w-100" to="/auth">Авторизация</router-link>
+                      </template>
+                      <template v-else>
+                          <router-link class="nav-link font-weight-normal mr-auto w-100" to="/task">Задачи</router-link>
+                          <a class="nav-link" href="#" @click.prevent="logout">Выйти</a>
+                      </template>
+
                   </b-navbar-nav>
 
               </b-collapse>
@@ -27,6 +32,11 @@
 
 <script>
 export default {
+  computed: {
+    auth: function () {
+      return this.$store.getters.isAuthenticated
+    }
+  },
   methods: {
     logout () {
       this.$store.dispatch('AUTH_LOGOUT')

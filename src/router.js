@@ -6,7 +6,7 @@ Vue.use(Router)
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
-    next('/')
+    next()
     return
   }
   next('/task')
@@ -28,10 +28,21 @@ export default new Router({
     {
       path: '/auth',
       name: 'auth',
-      component: () => import('./views/Auth.vue')
+      component: () => import('./views/Auth.vue'),
+      beforeEnter: ifNotAuthenticated
     },
     {
       path: '/',
+      redirect: to => {
+        if (store.getters.isAuthenticated) {
+          return '/task'
+        } else {
+          return '/auth'
+        }
+      }
+    },
+    {
+      path: '/task',
       name: 'task',
       component: () => import('./views/Task.vue'),
       beforeEnter: ifAuthenticated
